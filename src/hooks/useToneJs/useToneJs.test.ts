@@ -1,6 +1,10 @@
-import { renderHook, act, waitFor, screen } from '@testing-library/react';
+import { renderHook, act, waitFor } from '@testing-library/react';
 import useToneJs from './useToneJs';
-import { getTransport, getDestination, start, Part as PartMock, triggerAttackReleaseMock, Time } from 'tone';
+import { getTransport, getDestination, start, Part as PartMock } from 'tone';
+import { SupportedSynthType } from './useToneJs';
+import { tMelodySequence } from '../../PianoBase/PianoBase.types';
+
+const triggerAttackReleaseMock = jest.fn();
 
 describe('useToneJs', () => {
   beforeEach(() => {
@@ -27,13 +31,14 @@ describe('useToneJs', () => {
 
   it('initializes synthRef correctly', async () => {
     const { result } = renderHook(() => useToneJs({
-      createSynth: () => ({
+      createSynth: () =>
+      ({
         triggerAttackRelease: triggerAttackReleaseMock,
         toDestination: () => ({}),
         connect: () => ({}),
         chain: () => ({}),
-        dispose: () => {},
-      }),
+        dispose: () => { },
+      } as unknown as SupportedSynthType),
     }));
     await waitFor(() => {
       expect(result.current.synthRef.current).toBeDefined();
@@ -43,13 +48,14 @@ describe('useToneJs', () => {
 
   it('playNote() calls triggerAttackRelease', async () => {
     const { result } = renderHook(() => useToneJs({
-      createSynth: () => ({
+      createSynth: () =>
+      ({
         triggerAttackRelease: triggerAttackReleaseMock,
         toDestination: () => ({}),
         connect: () => ({}),
         chain: () => ({}),
-        dispose: () => {},
-      }),
+        dispose: () => { },
+      } as unknown as SupportedSynthType),
     }));
     await waitFor(() => expect(result.current.synthRef.current).toBeDefined());
 
@@ -61,15 +67,16 @@ describe('useToneJs', () => {
 
   it('playArpeggio() calls triggerAttackRelease for each note', async () => {
     const { result } = renderHook(() => useToneJs({
-      createSynth: () => ({
+      createSynth: () =>
+      ({
         triggerAttackRelease: triggerAttackReleaseMock,
         toDestination: () => ({}),
         connect: () => ({}),
         chain: () => ({}),
-        dispose: () => {},
-      }),
+        dispose: () => { },
+      } as unknown as SupportedSynthType),
     }));
-    
+
     await waitFor(() => {
       expect(result.current.synthRef.current).toBeDefined();
     });
@@ -90,24 +97,23 @@ describe('useToneJs', () => {
 
   it('scheduleMelody creates a Tone.Part and starts it', async () => {
     const { result } = renderHook(() => useToneJs({
-      createSynth: () => ({
+      createSynth: () =>
+      ({
         triggerAttackRelease: triggerAttackReleaseMock,
         toDestination: () => ({}),
         connect: () => ({}),
         chain: () => ({}),
-        dispose: () => {},
-      }),
+        dispose: () => { },
+      } as unknown as SupportedSynthType),
     }));
-    const melody = [{ time: '0:0', note: 'C4', duration: '8n' }];
-    
-    await waitFor(() => expect(result.current.synthRef.current).toBeDefined());
+    const melody: tMelodySequence = [{ time: '0:0', pitches: ['C4'], duration: '8n' }];
 
     act(() => {
-      result.current.scheduleMelody(melody);
+      result.current.scheduleMelody(melody, jest.fn());
     });
 
     expect(PartMock).toHaveBeenCalled();
-    const partInstance = (PartMock as jest.Mock).mock.results[0].value;
+    const partInstance = (PartMock as unknown as jest.Mock).mock.results[0].value;
     expect(partInstance.start).toHaveBeenCalled();
   });
 });
