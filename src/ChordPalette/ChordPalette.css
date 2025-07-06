@@ -66,6 +66,11 @@
   padding-left: 3px;
 }
 
+.chord-notes {
+  font-size: 18px;
+  opacity: 0.8;
+}
+
 .chord-notes-row {
   display: flex;
   flex-direction: row;
