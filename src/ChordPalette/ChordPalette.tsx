@@ -1,6 +1,5 @@
 import React, { useState, useCallback } from "react";
 import type { tChordWithName, tNote, tOctaveRange, tChord } from "../PianoBase/PianoBase.types";
-// Importar simplifyNoteName
 import { generateChordsForNote, filterChords, getChordColor, simplifyNoteName } from "./ChordPalette.utils";
 import "./chordPalette.css";
 
@@ -13,34 +12,29 @@ type ChordPaletteParams = {
 };
 
 interface tChordPaletteProps {
-  params?: ChordPaletteParams; // Hacer params opcional
+  params?: ChordPaletteParams;
   showNotes?: boolean;
   showName?: boolean;
   debug?: boolean;
 }
 
 export default function ChordPalette({
-  params, // params puede ser undefined
+  params,
   showNotes = true,
   showName = true,
   debug = false
 }: tChordPaletteProps) {
-  // Valores por defecto para params y sus propiedades
-  const defaultOctave: tOctaveRange = 4; // Ejemplo de octava por defecto
-  const defaultSetChord = () => {
-    // console.warn("ChordPalette: setCurrentChord not provided, using no-op default.");
-  };
-  const defaultSetColor = () => {
-    // console.warn("ChordPalette: setCurrentColor not provided, using no-op default.");
-  };
+  const defaultOctave: tOctaveRange = 4;
+  const defaultSetChord = () => {};
+  const defaultSetColor = () => {};
 
   const {
-    currentChord = [], // Valor por defecto si currentChord no está en params
+    currentChord = [],
     setCurrentChord = defaultSetChord,
-    currentColor = "#cccccc", // Valor por defecto si currentColor no está en params
+    currentColor = "#cccccc",
     setCurrentColor = defaultSetColor,
-    octave = defaultOctave // Valor por defecto si octave no está en params
-  } = params || {}; // Si params es undefined, usar un objeto vacío para la desestructuración
+    octave = defaultOctave
+  } = params || {};
 
   const notes: tNote[] = ['C', 'D', 'E', 'F', 'G', 'A', 'B'];
   const [showInversions, setShowInversions] = useState<boolean>(false);
@@ -60,7 +54,6 @@ export default function ChordPalette({
     setSelectedChordId(chord.id);
   }, [setCurrentChord, setCurrentColor, setSelectedChordId]);
 
-  // Drag and drop handlers
   const handleDragStart = (event: React.DragEvent, chord: tChordWithName) => {
     event.dataTransfer.setData('application/json', JSON.stringify(chord));
   };
@@ -100,19 +93,18 @@ export default function ChordPalette({
           const filteredChords = filterChords(chordsForNote, searchFilter)
             .filter(chord => showInversions || !chord.id.includes('_inv'));
 
-          // Solo mostrar la columna si tiene acordes que coincidan con el filtro
           if (filteredChords.length === 0 && searchFilter) return null;
 
           return (
             <div key={note} className="chord-column">
               <h2>{note} Chords</h2>
               {filteredChords.map(chord => {
-                const isInvestment = chord.id.includes('_inv'); // Mantener para la clase CSS 'inverted'
-                // La nota base para el color será la nota más grave de la formación actual del acorde.
+                const isInvestment = chord.id.includes('_inv');
                 const baseNoteForColor = simplifyNoteName(chord.chord[0]);
                 return (
                   <button
                     key={chord.id}
+                    aria-label={`${chord.name} ${chord.chord.map(n => n.replace(/\d+$/, '')).join(' ')}`}
                     onClick={() => handleChordClick(chord)}
                     style={{
                       background: getChordColor(
@@ -128,8 +120,8 @@ export default function ChordPalette({
                     {showName && <div className="chord-name">{chord.name}</div>}
                     {showNotes && (
                       <div className="chord-notes-row">
-                        {chord.chord.map((note, idx) => (
-                          <div className="chord-note-band" key={idx}>
+                        {chord.chord.map((note) => (
+                          <div className="chord-note-band" key={note}>
                             {note}
                           </div>
                         ))}

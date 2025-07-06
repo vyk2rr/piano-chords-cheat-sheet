@@ -1,4 +1,6 @@
 import { getChordColor } from './ChordPalette.utils';
+import { render, screen, fireEvent } from '@testing-library/react';
+import ChordPalette from './ChordPalette';
 
 describe('getChordColor D chords', () => {
   test('D major returns basic orange HSL', () => {
@@ -54,5 +56,32 @@ describe('getChordColor D chords', () => {
     expect(getChordColor('D', 'dom9')).toBe('hsl(30, 77%, 59%)');
     expect(getChordColor('D', 'dom11')).toBe('hsl(30, 79%, 66%)');
     expect(getChordColor('D', 'dom13')).toBe('hsl(30, 81%, 73%)');
+  });
+});
+
+describe('ChordPalette Component ARIA Labels', () => {
+  const mockParams = {
+    currentChord: [],
+    setCurrentChord: jest.fn(),
+    currentColor: '',
+    setCurrentColor: jest.fn(),
+    octave: 4 as const,
+  };
+
+  it('should render buttons with correct aria-label for root position chords', () => {
+    render(<ChordPalette params={mockParams} />);
+
+    const cMajorButton = screen.getByRole('button', { name: /Cmaj C E G/i });
+    expect(cMajorButton).toHaveAttribute('aria-label', 'Cmaj C E G');
+  });
+
+  it('should render buttons with correct aria-label for inverted chords', async () => {
+    render(<ChordPalette params={mockParams} />);
+
+    const showInversionsButton = screen.getByRole('button', { name: /Mostrar inversiones/i });
+    fireEvent.click(showInversionsButton);
+
+    const cMajorInversionButton = await screen.findByRole('button', { name: /Cmaj \(1ª\) E G C/i });
+    expect(cMajorInversionButton).toHaveAttribute('aria-label', 'Cmaj (1ª) E G C');
   });
 });

@@ -6,17 +6,20 @@ import { tMelodySequence } from '../../PianoBase/PianoBase.types';
 
 const triggerAttackReleaseMock = jest.fn();
 
+type TransportType = ReturnType<typeof getTransport>;
+type DestinationType = ReturnType<typeof getDestination>;
+
 describe('useToneJs', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (getTransport() as any).bpm.value = 120;
-    (getDestination() as any).volume.value = 0;
+    (getTransport() as TransportType).bpm.value = 120;
+    (getDestination() as DestinationType).volume.value = 0;
   });
 
   it('sets initial bpm and volume', () => {
     renderHook(() => useToneJs());
-    expect((getTransport() as any).bpm.value).toBe(120);
-    expect((getDestination() as any).volume.value).toBe(0);
+    expect((getTransport() as TransportType).bpm.value).toBe(120);
+    expect((getDestination() as DestinationType).volume.value).toBe(0);
   });
 
   it('start() calls Tone.start and transport.start and sets isReady', async () => {
