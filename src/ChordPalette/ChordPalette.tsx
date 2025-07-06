@@ -114,20 +114,27 @@ export default function ChordPalette({
                   <button
                     key={chord.id}
                     onClick={() => handleChordClick(chord)}
-                    // Usar 'background' para soportar linear-gradient
                     style={{
                       background: getChordColor(
                         baseNoteForColor,
                         chord.quality,
-                        chord.chord // Siempre pasar las notas del acorde para el degradado
+                        chord.chord
                       )
                     }}
                     className={`chord-button ${isInvestment ? 'inverted' : ''} ${selectedChordId === chord.id ? 'selected' : ''}`}
                     draggable
                     onDragStart={e => handleDragStart(e, chord)}
                   >
-                    {showName ? <div className="chord-name">{chord.name}</div> : ''}
-                    {showNotes ? <div className="chord-notes">{chord.displayNotes}</div> : ''}
+                    {showName && <div className="chord-name">{chord.name}</div>}
+                    {showNotes && (
+                      <div className="chord-notes-row">
+                        {chord.chord.map((note, idx) => (
+                          <div className="chord-note-band" key={idx}>
+                            {note}
+                          </div>
+                        ))}
+                      </div>
+                    )}
                   </button>
                 );
               })}
