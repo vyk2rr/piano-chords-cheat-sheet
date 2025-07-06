@@ -23,7 +23,7 @@
 
 .chord-button {
   width: 100%;
-  padding: 10px;
+  padding: 10px 0;
   border: none;
   border-radius: 4px;
   cursor: pointer;
@@ -57,14 +57,39 @@
 
 .chord-name {
   font-weight: bold;
-  font-size: 10px;
+  font-size: 15px;
+  margin-left: 10px;
+  margin-right: 10px;
   margin-bottom: 4px;
   opacity: 0.7;
+  background: linear-gradient(to right, #f0f0f0 0%, transparent 25%);
+  padding-left: 3wpx;
 }
 
 .chord-notes {
   font-size: 18px;
   opacity: 0.8;
+}
+
+.chord-notes-row {
+  display: flex;
+  flex-direction: row;
+  justify-content: stretch;
+  align-items: stretch;
+  width: 100%;
+  margin-top: 4px;
+}
+
+.chord-note-band {
+  flex: 1 1 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 1.1em;
+  font-weight: bold;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
 }
 
 .search-container {
