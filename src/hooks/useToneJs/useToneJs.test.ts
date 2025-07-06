@@ -1,6 +1,6 @@
 import { renderHook, act, waitFor } from '@testing-library/react';
 import useToneJs from './useToneJs';
-import { getTransport, getDestination, start, Part as PartMock } from 'tone';
+import { getTransport, getDestination, start, Part as PartMock, Transport, Destination } from 'tone';
 import { SupportedSynthType } from './useToneJs';
 import { tMelodySequence } from '../../PianoBase/PianoBase.types';
 
@@ -9,14 +9,14 @@ const triggerAttackReleaseMock = jest.fn();
 describe('useToneJs', () => {
   beforeEach(() => {
     jest.clearAllMocks();
-    (getTransport() as any).bpm.value = 120;
-    (getDestination() as any).volume.value = 0;
+    (getTransport() as Transport).bpm.value = 120; // Usa el tipo Transport
+    (getDestination() as Destination).volume.value = 0; // Usa el tipo Destination
   });
 
   it('sets initial bpm and volume', () => {
     renderHook(() => useToneJs());
-    expect((getTransport() as any).bpm.value).toBe(120);
-    expect((getDestination() as any).volume.value).toBe(0);
+    expect((getTransport() as Transport).bpm.value).toBe(120);
+    expect((getDestination() as Destination).volume.value).toBe(0);
   });
 
   it('start() calls Tone.start and transport.start and sets isReady', async () => {
