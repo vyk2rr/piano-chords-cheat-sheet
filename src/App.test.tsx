@@ -1,6 +1,5 @@
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import App from './App';
-import ChordPalette from './ChordPalette';
 import '@testing-library/jest-dom';
 
 // Jest usará automáticamente el mock corregido en __mocks__/tone.js
