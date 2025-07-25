@@ -101,7 +101,7 @@ const PianoBase = forwardRef<PianoBaseHandle, PianoBaseProps>(({
     const { pitches, duration, highlightGroup } = event;
     if (!pitches || pitches.length === 0 || !durationToMs) return;
 
-    console.log('Resaltando acorde:', pitches, 'con duración:', duration);
+    // console.log('Resaltando acorde:', pitches, 'con duración:', duration);
 
     pianoObservable?.notify({ type: "chordPlayed", chord: pitches });
 

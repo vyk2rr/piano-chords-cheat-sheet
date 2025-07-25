@@ -62,8 +62,9 @@
   margin-right: 10px;
   margin-bottom: 4px;
   opacity: 0.7;
-  background: linear-gradient(to right, #f0f0f0 0%, transparent 25%);
+  background: linear-gradient(to right, #000 0%, transparent 45%);
   padding-left: 3px;
+  color: #fff;
 }
 
 .chord-notes {
@@ -90,6 +91,7 @@
   margin: 0;
   padding: 0;
   min-width: 0;
+  color: #fff;
 }
 
 .search-container {
