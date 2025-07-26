@@ -33,6 +33,7 @@ export interface PianoBaseProps {
   className?: string;
   renderUI?: (params: RenderUIParams) => React.ReactNode;
   createSynth?: () => SupportedSynthType;
+  highlightPlayMode?: 'chord' | 'arpeggio';
 }
 
 export type PianoBaseHandle = {
@@ -55,11 +56,12 @@ const PianoBase = forwardRef<PianoBaseHandle, PianoBaseProps>(({
   octave = 4,
   octaves = 3,
   highlightOnThePiano,
-  errorNotes = [], // Receive errorNotes
+  errorNotes = [],
   pianoObservable,
   className,
   renderUI,
   createSynth,
+  highlightPlayMode = 'arpeggio',
 }, ref) => {
   const { white, black } = generateNotes(octaves, octave);
 
@@ -89,13 +91,17 @@ const PianoBase = forwardRef<PianoBaseHandle, PianoBaseProps>(({
     if (highlightOnThePiano) {
       const chordArray = Array.isArray(highlightOnThePiano) ? highlightOnThePiano : [highlightOnThePiano];
 
-      playArpeggio(chordArray, "4n", "16n", 0.7);
+      if (highlightPlayMode === 'chord') {
+        playChord(chordArray, "4n", undefined, 0.7);
+      } else {
+        playArpeggio(chordArray, "4n", "16n", 0.7);
+      }
 
       chordArray.forEach(note => {
         highlightNoteInGroup(note, Infinity, 0);
       });
     }
-  }, [highlightOnThePiano, highlightNoteInGroup, clearGroupHighlights, playArpeggio]);
+  }, [highlightOnThePiano, highlightNoteInGroup, clearGroupHighlights, playArpeggio, playChord, highlightPlayMode]);
 
   const handleMelodyEvent = (event: iChordEvent) => {
     const { pitches, duration, highlightGroup } = event;
