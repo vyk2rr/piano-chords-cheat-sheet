@@ -2,12 +2,13 @@ import { useState } from "react";
 import PianoBase from "./PianoBase/PianoBase";
 import ChordPalette from "./ChordPalette/ChordPalette";
 import type { tChord } from "./PianoBase/PianoBase.types";
+import PlayModeToggle, { PlayMode } from './PlayModeToggle/PlayModeToggle.tsx';
 import "./App.css";
 
 function App() {
   const [currentChord, setCurrentChord] = useState<tChord>([]);
   const [currentColor, setCurrentColor] = useState<string>("#cccccc");
-  const [highlightPlayMode, setHighlightPlayMode] = useState<'chord' | 'arpeggio'>('chord');
+  const [highlightPlayMode, setHighlightPlayMode] = useState<PlayMode>('chord');
 
   return (
     <div>
@@ -15,20 +16,14 @@ function App() {
         <PianoBase highlightOnThePiano={currentChord} highlightPlayMode={highlightPlayMode} />
       </div>
 
-      <div className="play-mode-buttons">
-        <button
-          className={highlightPlayMode === 'arpeggio' ? 'active' : ''}
-          onClick={() => setHighlightPlayMode('arpeggio')}
-        >
-          Arpegio
-        </button>
-        <button
-          className={highlightPlayMode === 'chord' ? 'active' : ''}
-          onClick={() => setHighlightPlayMode('chord')}
-        >
-          Acorde
-        </button>
-      </div>
+      <PlayModeToggle
+        highlightPlayMode={highlightPlayMode}
+        setHighlightPlayMode={setHighlightPlayMode}
+      />
+
+      {/* // [INSPIRATION/REFERENCE ONLY]
+      // This block is intentionally left commented out for future UI ideas.
+      // Not used in current implementation. */}
 
       {/* {highlightPlayMode === 'arpeggio' ? (
         <div>
